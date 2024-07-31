@@ -1,2 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Enashpinal's Blog</title><link>https://enashpinal.github.io</link><description>The jumping blocks at my are my lifelong belief.</description><copyright>Enashpinal's Blog</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://enashpinal.pages.dev/touxiang.jpg</url><title>avatar</title><link>https://enashpinal.github.io</link></image><lastBuildDate>Wed, 31 Jul 2024 12:35:31 +0000</lastBuildDate><managingEditor>Enashpinal's Blog</managingEditor><ttl>60</ttl><webMaster>Enashpinal's Blog</webMaster><item><title>Hello world</title><link>https://enashpinal.github.io/post/Hello%20world.html</link><description>Hello world。</description><guid isPermaLink="true">https://enashpinal.github.io/post/Hello%20world.html</guid><pubDate>Wed, 31 Jul 2024 12:01:23 +0000</pubDate></item></channel></rss>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0"><channel><title>Enashpinal's Blog</title><link>https://enashpinal.github.io</link><description>The jumping blocks at my are my lifelong belief.</description><copyright>Enashpinal's Blog</copyright><docs>http://www.rssboard.org/rss-specification</docs><generator>python-feedgen</generator><image><url>https://enashpinal.pages.dev/touxiang.jpg</url><title>avatar</title><link>https://enashpinal.github.io</link></image><lastBuildDate>Wed, 31 Jul 2024 13:31:29 +0000</lastBuildDate><managingEditor>Enashpinal's Blog</managingEditor><ttl>60</ttl><webMaster>Enashpinal's Blog</webMaster><item><title>【教程】百度网盘如何像磁盘一样挂载到本地</title><link>https://enashpinal.github.io/post/%E3%80%90-jiao-cheng-%E3%80%91-bai-du-wang-pan-ru-he-xiang-ci-pan-yi-yang-gua-zai-dao-ben-di.html</link><description>## 材料&#13;
+1.一个百度网盘账号&#13;
+2.windows10系统&#13;
+3.Alist和RaiDrive&#13;
+&#13;
+## 所需文件下载（Alist 和 RaiDrive 安装包）&#13;
+下载链接：[百度网盘](https://pan.baidu.com/s/129HPJ1dk1pPNdGhbXuR42w?pwd=3h5i)&#13;
+&#13;
+## 第一步&#13;
+下载并解压所需文件，右键点击`alist-windows-4.0-amd64.exe`以管理员身份运行。</description><guid isPermaLink="true">https://enashpinal.github.io/post/%E3%80%90-jiao-cheng-%E3%80%91-bai-du-wang-pan-ru-he-xiang-ci-pan-yi-yang-gua-zai-dao-ben-di.html</guid><pubDate>Wed, 31 Jul 2024 13:24:06 +0000</pubDate></item></channel></rss>
