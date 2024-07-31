@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html data-color-mode="light" data-dark-theme="dark" data-light-theme="light" lang="zh-CN">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
+    
+    <link rel="icon" href="https://enashpinal.pages.dev/touxiang.jpg"><script>
+        let theme = localStorage.getItem("meek_theme") || "light";
+        document.documentElement.setAttribute("data-color-mode", theme);
+    </script>
+<meta name="description" content="# 效果展示
+![img](https://enashpinal.pages.dev/blog/b7/img.webp 'img')
+具体效果可以看我的网站：https://enashpinal.pages.dev
+
+# 实现过程
+
+## 检测鼠标滚动
+首先，我们需要检测你的滚动动作。">
+<meta property="og:title" content="【前端开发『原创』】几行JavaScript实现平滑的网页滚动">
+<meta property="og:description" content="# 效果展示
+![img](https://enashpinal.pages.dev/blog/b7/img.webp 'img')
+具体效果可以看我的网站：https://enashpinal.pages.dev
+
+# 实现过程
+
+## 检测鼠标滚动
+首先，我们需要检测你的滚动动作。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://enashpinal.github.io/post/%E3%80%90-qian-duan-kai-fa-%E3%80%8E-yuan-chuang-%E3%80%8F%E3%80%91-ji-xing-JavaScript-shi-xian-ping-hua-de-wang-ye-gun-dong.html">
+<meta property="og:image" content="https://enashpinal.pages.dev/touxiang.jpg">
+<title>【前端开发『原创』】几行JavaScript实现平滑的网页滚动</title>
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
+
+
+</head>
+<style>
+body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;padding: 45px;font-size: 16px;font-family: sans-serif;line-height: 1.25;}
+#header{display:flex;padding-bottom:8px;border-bottom: 1px solid var(--borderColor-muted, var(--color-border-muted));margin-bottom: 16px;}
+#footer {margin-top:64px; text-align: center;font-size: small;}
+
+</style>
+
+<style>
+.postTitle{margin: auto 0;font-size:40px;font-weight:bold;}
+.title-right{display:flex;margin:auto 0 0 auto;}
+.title-right .circle{padding: 14px 16px;margin-right:8px;}
+#postBody{border-bottom: 1px solid var(--color-border-default);padding-bottom:36px;}
+#postBody hr{height:2px;}
+#cmButton{height:48px;margin-top:48px;}
+#comments{margin-top:64px;}
+.g-emoji{font-size:24px;}
+@media (max-width: 600px) {
+    body {padding: 8px;}
+    .postTitle{font-size:24px;}
+}
+</style>
+
+
+
+
+<body>
+    <div id="header">
+<h1 class="postTitle">【前端开发『原创』】几行JavaScript实现平滑的网页滚动</h1>
+<div class="title-right">
+    <a href="https://enashpinal.github.io" id="buttonHome" class="btn btn-invisible circle" title="首页">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathHome" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+    <a href="https://github.com/Enashpinal/enashpinal.github.io/issues/10" target="_blank" class="btn btn-invisible circle" title="Issue">
+        <svg class="octicon" width="16" height="16">
+            <path id="pathIssue" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+    
+
+    <a class="btn btn-invisible circle" onclick="modeSwitch();" title="切换主题">
+        <svg class="octicon" width="16" height="16" >
+            <path id="themeSwitch" fill-rule="evenodd"></path>
+        </svg>
+    </a>
+
+</div>
+</div>
+    <div id="content">
+<div class="markdown-body" id="postBody"><h1>效果展示</h1>
+<p><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/0b69694a68ae6529cda712a92e3610ff363550e24b0124ddfe8d513b29f05fb6/68747470733a2f2f656e61736870696e616c2e70616765732e6465762f626c6f672f62372f696d672e77656270"><img src="https://camo.githubusercontent.com/0b69694a68ae6529cda712a92e3610ff363550e24b0124ddfe8d513b29f05fb6/68747470733a2f2f656e61736870696e616c2e70616765732e6465762f626c6f672f62372f696d672e77656270" alt="img" title="img" data-canonical-src="https://enashpinal.pages.dev/blog/b7/img.webp" style="max-width: 100%;"></a><br>
+具体效果可以看我的网站：<a href="https://enashpinal.pages.dev" rel="nofollow">https://enashpinal.pages.dev</a></p>
+<h1>实现过程</h1>
+<h2>检测鼠标滚动</h2>
+<p>首先，我们需要检测你的滚动动作。通过 <code class="notranslate">wheel</code> 事件，我们可以检测到你的鼠标滚动状态，从而知道是向上还是向下滚动、滚动了多少。</p>
+<h2>更新目标位置</h2>
+<p>当检测到滚动状态后，我们可以根据你滚动的动作来更新目标位置。如果你在向下滚动，就把目标位置往下移；如果你在向上滚动，目标位置就往上移。</p>
+<h2>平滑过渡</h2>
+<p>为了让滚动看起来更平缓，我们需要在你当前的位置和目标位置之间进行一些过渡。说白了就是减缓滚动速度，随着你滚动时间的变化慢慢变快。惯性大小通过以下公式进行计算：</p>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-s1">currentScroll</span> <span class="pl-c1">+=</span> <span class="pl-kos">(</span><span class="pl-s1">targetScroll</span> <span class="pl-c1">-</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">)</span> <span class="pl-c1">*</span> <span class="pl-s1">inertia</span><span class="pl-kos">;</span></pre></div>
+<ul>
+<li><code class="notranslate">currentScroll</code>: 当前的滚动位置。</li>
+<li><code class="notranslate">targetScroll</code>: 目标滚动位置，即希望滚动到的位置。</li>
+<li><code class="notranslate">inertia</code>: 惯性因子，通常是一个介于 0 和 1 之间的值，用于控制滚动的速度和流畅度。</li>
+</ul>
+<h2>动画效果</h2>
+<p>我们用 <code class="notranslate">requestAnimationFrame</code>（一个浏览器提供的API）来处理动画。这个方法会在浏览器下次重绘之前调用我们的函数，让动画看起来更流畅。在每一帧更新当前滚动的位置，然后用 <code class="notranslate">window.scrollTo</code> 把页面滚动到目标位置。</p>
+<h2>停止条件</h2>
+<p>当你没有滚动的时候。也就是说当前滚动位置和目标位置之间的差距很小，我们就可以关闭动画效果，这样就能避免不必要的计算，提升性能（可能吧）。</p>
+<h1>上代码！</h1>
+<p>听起来挺复杂，其实实现效果还是挺简单的</p>
+<h2>JavaScript code</h2>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">let</span> <span class="pl-s1">currentScroll</span> <span class="pl-c1">=</span> <span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-c1">scrollY</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">targetScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">inertia</span> <span class="pl-c1">=</span> <span class="pl-c1">0.001</span><span class="pl-kos">;</span>
+
+<span class="pl-k">function</span> <span class="pl-en">smoothScroll</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">currentScroll</span> <span class="pl-c1">+=</span> <span class="pl-kos">(</span><span class="pl-s1">targetScroll</span> <span class="pl-c1">-</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">)</span> <span class="pl-c1">*</span> <span class="pl-s1">inertia</span><span class="pl-kos">;</span>
+    <span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">scrollTo</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-en">abs</span><span class="pl-kos">(</span><span class="pl-s1">targetScroll</span> <span class="pl-c1">-</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">)</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0.1</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-en">requestAnimationFrame</span><span class="pl-kos">(</span><span class="pl-s1">smoothScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">addEventListener</span><span class="pl-kos">(</span><span class="pl-s">'wheel'</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">event</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">event</span><span class="pl-kos">.</span><span class="pl-en">preventDefault</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">targetScroll</span> <span class="pl-c1">+=</span> <span class="pl-s1">event</span><span class="pl-kos">.</span><span class="pl-c1">deltaY</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span> ? <span class="pl-s1">scrollSpeed</span> : <span class="pl-c1">-</span><span class="pl-s1">scrollSpeed</span><span class="pl-kos">;</span>
+    <span class="pl-en">smoothScroll</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">,</span> <span class="pl-kos">{</span> <span class="pl-c1">passive</span>: <span class="pl-c1">false</span> <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<h2>HTML code</h2>
+<div class="highlight highlight-text-html-basic"><pre class="notranslate"><span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>="<span class="pl-s">smoothScroll.js</span>"<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span></pre></div>
+<h1>对于特殊情况</h1>
+<p>如果你的网页里有锚点导航，那么直接使用上面这段代码的话会出问题，锚点导航会失效，这时候我们再添加一段JavaScript代码就好了。</p>
+<h2>实现过程</h2>
+<h3>选择链接</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-en">querySelectorAll</span><span class="pl-kos">(</span><span class="pl-s">'a[href^="#"]'</span><span class="pl-kos">)</span></pre></div>
+<p>这行代码选择所有 href 属性以 <code class="notranslate">#</code> 开头的链接，也就是提取锚点导航链接。</p>
+<h3>遍历链接</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-kos">.</span><span class="pl-s1">forEach</span><span class="pl-kos">(</span><span class="pl-s1">anchor</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span></pre></div>
+<p>对每个选择到的链接进行遍历，并为每个链接添加点击事件监听器（事件监听器用于检测你有没有点击锚点导航链接）。</p>
+<h3>添加事件监听器</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-s1">anchor</span><span class="pl-kos">.</span><span class="pl-c1">addEventListener</span><span class="pl-kos">(</span><span class="pl-s">'click'</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-kos">{</span></pre></div>
+<p>当检测到链接被点击时，触发这个函数。</p>
+<h3>阻止默认行为</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-s1">e</span><span class="pl-kos">.</span><span class="pl-en">preventDefault</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p>阻止浏览器的默认行为，防止页面直接跳转到锚点指向的位置。</p>
+<h3>获取目标元素</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">targetId</span> <span class="pl-c1">=</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">getAttribute</span><span class="pl-kos">(</span><span class="pl-s">'href'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">targetElement</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-en">querySelector</span><span class="pl-kos">(</span><span class="pl-s1">targetId</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p>获取你点击的链接的 href 属性值（就是目标锚点的 ID），并通过这个 ID 找到对应的元素。</p>
+<h3>检查目标元素是否存在</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">targetElement</span><span class="pl-kos">)</span> <span class="pl-kos">{</span><span class="pl-kos"></span></pre></div>
+<p>检查目标元素是否存在，如果存在，继续执行程序。</p>
+<h3>设置滚动参数</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-s1">targetScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">targetElement</span><span class="pl-kos">.</span><span class="pl-c1">offsetTop</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">startScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">distance</span> <span class="pl-c1">=</span> <span class="pl-s1">targetScroll</span> <span class="pl-c1">-</span> <span class="pl-s1">startScroll</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">duration</span> <span class="pl-c1">=</span> <span class="pl-c1">300</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">startTime</span> <span class="pl-c1">=</span> <span class="pl-s1">performance</span><span class="pl-kos">.</span><span class="pl-en">now</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<ul>
+<li><code class="notranslate">targetScroll</code>: 目标元素的垂直位置。</li>
+<li><code class="notranslate">startScroll</code>: 当前的滚动位置。</li>
+<li><code class="notranslate">distance</code>: 从当前滚动位置到目标位置的距离。</li>
+<li><code class="notranslate">duration</code>: 动画持续时间（300毫秒）。</li>
+<li><code class="notranslate">startTime</code>: 动画开始时间。</li>
+</ul>
+<h3>定义动画函数</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">function</span> <span class="pl-en">animateScroll</span><span class="pl-kos">(</span><span class="pl-s1">currentTime</span><span class="pl-kos">)</span> <span class="pl-kos">{</span><span class="pl-kos"></span></pre></div>
+<p>定义一个滚动的动画函数。</p>
+<h3>计算动画进度</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">elapsed</span> <span class="pl-c1">=</span> <span class="pl-s1">currentTime</span> <span class="pl-c1">-</span> <span class="pl-s1">startTime</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">progress</span> <span class="pl-c1">=</span> <span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-en">min</span><span class="pl-kos">(</span><span class="pl-s1">elapsed</span> <span class="pl-c1">/</span> <span class="pl-s1">duration</span><span class="pl-kos">,</span> <span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-k">const</span> <span class="pl-s1">newScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">startScroll</span> <span class="pl-c1">+</span> <span class="pl-s1">distance</span> <span class="pl-c1">*</span> <span class="pl-s1">progress</span><span class="pl-kos">;</span></pre></div>
+<ul>
+<li><code class="notranslate">elapsed</code>: 从开始滚动到当前的时间。</li>
+<li><code class="notranslate">progress</code>: 动画的进度，在 0 和 1 之间。</li>
+<li><code class="notranslate">newScroll</code>: 根据进度计算新的滚动位置。</li>
+</ul>
+<h3>执行滚动</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">scrollTo</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s1">newScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p>使用 <code class="notranslate">window.scrollTo</code> 方法滚动到新的位置。</p>
+<h3>检查是否完成滚动</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">progress</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">1</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-en">requestAnimationFrame</span><span class="pl-kos">(</span><span class="pl-s1">animateScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">currentScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">newScroll</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span></pre></div>
+<p>如果动画还未完成，使用 <code class="notranslate">requestAnimationFrame</code> 继续调用 <code class="notranslate">animateScroll</code>。如果动画完成，更新 <code class="notranslate">currentScroll</code> 为新的滚动位置。</p>
+<h3>启动动画</h3>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-en">requestAnimationFrame</span><span class="pl-kos">(</span><span class="pl-s1">animateScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<p>开始动画。</p>
+<h1>完整JavaScript代码</h1>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">let</span> <span class="pl-s1">scrollSpeed</span> <span class="pl-c1">=</span> <span class="pl-c1">40</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">currentScroll</span> <span class="pl-c1">=</span> <span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-c1">scrollY</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">targetScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">;</span>
+
+<span class="pl-k">let</span> <span class="pl-s1">inertia</span> <span class="pl-c1">=</span> <span class="pl-c1">0.001</span><span class="pl-kos">;</span>
+
+<span class="pl-k">function</span> <span class="pl-en">smoothScroll</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">currentScroll</span> <span class="pl-c1">+=</span> <span class="pl-kos">(</span><span class="pl-s1">targetScroll</span> <span class="pl-c1">-</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">)</span> <span class="pl-c1">*</span> <span class="pl-s1">inertia</span><span class="pl-kos">;</span>
+    <span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">scrollTo</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-en">abs</span><span class="pl-kos">(</span><span class="pl-s1">targetScroll</span> <span class="pl-c1">-</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">)</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0.1</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-en">requestAnimationFrame</span><span class="pl-kos">(</span><span class="pl-s1">smoothScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-kos">}</span>
+<span class="pl-kos">}</span>
+
+<span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">addEventListener</span><span class="pl-kos">(</span><span class="pl-s">'wheel'</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">event</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">event</span><span class="pl-kos">.</span><span class="pl-en">preventDefault</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+    <span class="pl-s1">targetScroll</span> <span class="pl-c1">+=</span> <span class="pl-s1">event</span><span class="pl-kos">.</span><span class="pl-c1">deltaY</span> <span class="pl-c1">&gt;</span> <span class="pl-c1">0</span> ? <span class="pl-s1">scrollSpeed</span> : <span class="pl-c1">-</span><span class="pl-s1">scrollSpeed</span><span class="pl-kos">;</span>
+    <span class="pl-en">smoothScroll</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+<span class="pl-kos">}</span><span class="pl-kos">,</span> <span class="pl-kos">{</span> <span class="pl-c1">passive</span>: <span class="pl-c1">false</span> <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+<span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-en">querySelectorAll</span><span class="pl-kos">(</span><span class="pl-s">'a[href^="#"]'</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-c1">forEach</span><span class="pl-kos">(</span><span class="pl-s1">anchor</span> <span class="pl-c1">=&gt;</span> <span class="pl-kos">{</span>
+    <span class="pl-s1">anchor</span><span class="pl-kos">.</span><span class="pl-en">addEventListener</span><span class="pl-kos">(</span><span class="pl-s">'click'</span><span class="pl-kos">,</span> <span class="pl-k">function</span><span class="pl-kos">(</span><span class="pl-s1">e</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+        <span class="pl-s1">e</span><span class="pl-kos">.</span><span class="pl-en">preventDefault</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+        <span class="pl-k">const</span> <span class="pl-s1">targetId</span> <span class="pl-c1">=</span> <span class="pl-smi">this</span><span class="pl-kos">.</span><span class="pl-en">getAttribute</span><span class="pl-kos">(</span><span class="pl-s">'href'</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-k">const</span> <span class="pl-s1">targetElement</span> <span class="pl-c1">=</span> <span class="pl-smi">document</span><span class="pl-kos">.</span><span class="pl-en">querySelector</span><span class="pl-kos">(</span><span class="pl-s1">targetId</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">targetElement</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+            <span class="pl-s1">targetScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">targetElement</span><span class="pl-kos">.</span><span class="pl-c1">offsetTop</span><span class="pl-kos">;</span>
+            <span class="pl-k">const</span> <span class="pl-s1">startScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">currentScroll</span><span class="pl-kos">;</span>
+            <span class="pl-k">const</span> <span class="pl-s1">distance</span> <span class="pl-c1">=</span> <span class="pl-s1">targetScroll</span> <span class="pl-c1">-</span> <span class="pl-s1">startScroll</span><span class="pl-kos">;</span>
+            <span class="pl-k">const</span> <span class="pl-s1">duration</span> <span class="pl-c1">=</span> <span class="pl-c1">300</span><span class="pl-kos">;</span>
+            <span class="pl-k">const</span> <span class="pl-s1">startTime</span> <span class="pl-c1">=</span> <span class="pl-s1">performance</span><span class="pl-kos">.</span><span class="pl-en">now</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+            <span class="pl-k">function</span> <span class="pl-en">animateScroll</span><span class="pl-kos">(</span><span class="pl-s1">currentTime</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+                <span class="pl-k">const</span> <span class="pl-s1">elapsed</span> <span class="pl-c1">=</span> <span class="pl-s1">currentTime</span> <span class="pl-c1">-</span> <span class="pl-s1">startTime</span><span class="pl-kos">;</span>
+                <span class="pl-k">const</span> <span class="pl-s1">progress</span> <span class="pl-c1">=</span> <span class="pl-v">Math</span><span class="pl-kos">.</span><span class="pl-en">min</span><span class="pl-kos">(</span><span class="pl-s1">elapsed</span> <span class="pl-c1">/</span> <span class="pl-s1">duration</span><span class="pl-kos">,</span> <span class="pl-c1">1</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+                <span class="pl-k">const</span> <span class="pl-s1">newScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">startScroll</span> <span class="pl-c1">+</span> <span class="pl-s1">distance</span> <span class="pl-c1">*</span> <span class="pl-s1">progress</span><span class="pl-kos">;</span>
+
+                <span class="pl-smi">window</span><span class="pl-kos">.</span><span class="pl-en">scrollTo</span><span class="pl-kos">(</span><span class="pl-c1">0</span><span class="pl-kos">,</span> <span class="pl-s1">newScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+
+                <span class="pl-k">if</span> <span class="pl-kos">(</span><span class="pl-s1">progress</span> <span class="pl-c1">&lt;</span> <span class="pl-c1">1</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>
+                    <span class="pl-en">requestAnimationFrame</span><span class="pl-kos">(</span><span class="pl-s1">animateScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+                <span class="pl-kos">}</span> <span class="pl-k">else</span> <span class="pl-kos">{</span>
+                    <span class="pl-s1">currentScroll</span> <span class="pl-c1">=</span> <span class="pl-s1">newScroll</span><span class="pl-kos">;</span>
+                <span class="pl-kos">}</span>
+            <span class="pl-kos">}</span>
+
+            <span class="pl-en">requestAnimationFrame</span><span class="pl-kos">(</span><span class="pl-s1">animateScroll</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
+        <span class="pl-kos">}</span>
+    <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">;</span></pre></div>
+<h2>感谢阅读！</h2>
+<p><em>码字不易，转载请注明出处</em></p></div>
+<div style="font-size:small;margin-top:8px;float:right;"></div>
+
+<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
+<div class="comments" id="comments"></div>
+
+</div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://enashpinal.github.io">Enashpinal's Blog</a></div>
+<div id="footer2">
+    <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
+</div>
+
+<script>
+var now=new Date();
+document.getElementById("copyrightYear").innerHTML=now.getFullYear();
+
+if(""!=""){
+    var startSite=new Date("");
+    var diff=now.getTime()-startSite.getTime();
+    var diffDay=Math.floor(diff/(1000*60*60*24));
+    document.getElementById("runday").innerHTML="网站运行"+diffDay+"天"+" • ";
+}
+</script></div>
+</body>
+<script>
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var utterancesLoad=0;
+
+let themeSettings={
+    "dark": ["dark","moon","#00f0ff","dark-blue"],
+    "light": ["light","sun","#ff5000","github-light"],
+    "auto": ["auto","sync","","preferred-color-scheme"]
+};
+function changeTheme(mode, icon, color, utheme){
+    document.documentElement.setAttribute("data-color-mode",mode);
+    document.getElementById("themeSwitch").setAttribute("d",value=IconList[icon]);
+    document.getElementById("themeSwitch").parentNode.style.color=color;
+    if(utterancesLoad==1){utterancesTheme(utheme);}
+}
+function modeSwitch(){
+    let currentMode=document.documentElement.getAttribute('data-color-mode');
+    let newMode = currentMode === "light" ? "dark" : currentMode === "dark" ? "auto" : "light";
+    localStorage.setItem("meek_theme", newMode);
+    if(themeSettings[newMode]){
+        changeTheme(...themeSettings[newMode]);
+    }
+}
+function utterancesTheme(theme){
+    const message={type:'set-theme',theme: theme};
+    const iframe=document.getElementsByClassName('utterances-frame')[0];
+    iframe.contentWindow.postMessage(message,'https://utteranc.es');
+}
+if(themeSettings[theme]){changeTheme(...themeSettings[theme]);}
+console.log("\n %c Gmeek last https://github.com/Meekdai/Gmeek \n","padding:5px 0;background:#02d81d;color:#fff");
+</script>
+
+<script>
+document.getElementById("pathHome").setAttribute("d",IconList["home"]);
+document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
+
+
+
+function openComments(){
+    cm=document.getElementById("comments");
+    cmButton=document.getElementById("cmButton");
+    cmButton.innerHTML="loading";
+    span=document.createElement("span");
+    span.setAttribute("class","AnimatedEllipsis");
+    cmButton.appendChild(span);
+
+    script=document.createElement("script");
+    script.setAttribute("src","https://utteranc.es/client.js");
+    script.setAttribute("repo","Enashpinal/enashpinal.github.io");
+    script.setAttribute("issue-term","title");
+    
+    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
+    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
+    else{script.setAttribute("theme","preferred-color-scheme");}
+    
+    script.setAttribute("crossorigin","anonymous");
+    script.setAttribute("async","");
+    cm.appendChild(script);
+
+    int=self.setInterval("iFrameLoading()",200);
+}
+
+function iFrameLoading(){
+    var utterances=document.getElementsByClassName('utterances');
+    if(utterances.length==1){
+        if(utterances[0].style.height!=""){
+            utterancesLoad=1;
+            int=window.clearInterval(int);
+            document.getElementById("cmButton").style.display="none";
+            console.log("utterances Load OK");
+        }
+    }
+}
+</script>
+
+
+</html>
