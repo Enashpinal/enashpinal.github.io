@@ -205,7 +205,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             requestAnimationFrame(animateScroll);
         }
     });
-}
+});
 ```
 ## 感谢阅读！
 _码字不易，转载请注明出处_
