@@ -1,4 +1,4 @@
-3D Card：https://uiverse.io/Smit-Prajapati/tricky-lionfish-78
+#### 本文仅讲解部分为原创，样式出自：https://uiverse.io/Smit-Prajapati/tricky-lionfish-78
 ## 效果展示
 ![录制_2024_08_13_11_50_48_809](https://github.com/user-attachments/assets/fbe39dbd-faed-4a3d-acd1-0bcdfa1e0f7a)
 ## 实现过程
